@@ -1,0 +1,12 @@
+﻿{
+  "count": 1,
+  "value": [
+    {
+      "id": "ABC",
+      "name": "Name",
+      "revision": 123,
+      "state": "ok",
+      "url": "https://ya.ru"
+    }
+  ]
+}

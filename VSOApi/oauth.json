@@ -1,0 +1,6 @@
+﻿{
+  "access_token": "ABC",
+  "token_type": "Bearer",
+  "expires_in": 12345,
+  "refresh_token": "ABC"
+}
