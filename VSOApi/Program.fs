@@ -11,7 +11,7 @@ type OAuth = JsonProvider<"oauth.json">
 type Projects = JsonProvider<"projects.json">
 
 let clientId = ""
-let secretKey = ""
+let secretKey =""
 let redirectUri = ""
 
 let authUri = "https://app.vssps.visualstudio.com/oauth2/authorize?mkt=ru-RU"
@@ -51,7 +51,7 @@ let accessToken token =
     printfn "Вы авторизованы! Продолжайте!"
 
 let runBrowser (url:string) = 
-    let form  = new Form(Text="VSO авторизация", WindowState = FormWindowState.Maximized)
+    use form  = new Form(Text="VSO авторизация", WindowState = FormWindowState.Maximized)
     form.ResumeLayout(false)
     form.PerformLayout()
     
@@ -59,15 +59,15 @@ let runBrowser (url:string) =
     let getCode (u:Uri) = parseQuery u |> (fun col -> match col with | n when n.AllKeys |> Array.contains "code" -> Some n.["code"] | _ -> None)
     let authorize = function
         | Some code -> 
-            form.Hide()
-            accessToken code
+            (form.Hide >> form.Close)()
+            (accessToken code)
         | None -> None |> ignore
         
-    let wb = new WebBrowser(Visible=true, Dock=DockStyle.Fill, ScriptErrorsSuppressed=true)
+    use wb = new WebBrowser(Visible=true, Dock=DockStyle.Fill, ScriptErrorsSuppressed=true)
     form.Controls.Add(wb)
     wb.Navigated |> Event.add ((fun e -> e.Url) >> getCode >> authorize)
     wb.Navigate(url)
-    form.ShowDialog() 
+    form.ShowDialog() |> ignore
 
 let query (url:string) = 
     let req = HttpWebRequest.Create(url) :?> HttpWebRequest
